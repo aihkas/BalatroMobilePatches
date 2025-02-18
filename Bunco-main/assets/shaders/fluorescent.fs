@@ -106,8 +106,14 @@ vec4 effect( vec4 colour, Image texture, vec2 texture_coords, vec2 screen_coords
     if (uv.x > uv.x * 2.0){
         uv = fluorescent;
     }
-
-	vec3 targetColors = vec3(0.0, 0.0, 0.0);
+	
+	vec3 targetColors[6];
+	targetColors[0] = vec3(1.0, 0.0, 0.0); // Red
+	targetColors[1] = vec3(0.0, 1.0, 0.0); // Green
+	targetColors[2] = vec3(0.0, 0.0, 1.0); // Blue
+	targetColors[3] = vec3(1.0, 1.0, 0.0); // Yellow
+	targetColors[4] = vec3(0.0, 1.0, 1.0); // Cyan
+	targetColors[5] = vec3(1.0, 0.0, 1.0); // Magenta
 
     float effect = 0.7 + (0.3 * clamp(cos(sin(uv.y * 8.24 + fluorescent.x * 6.0) + sin(uv.x * 6.12 + fluorescent.x * 2.0) * fluorescent.x * uv.y * 3.15), 0.0, 1.0));
 
@@ -121,27 +127,8 @@ vec4 effect( vec4 colour, Image texture, vec2 texture_coords, vec2 screen_coords
 
     // Iterate through all target colors
     for (int i = 0; i < 6; i++) {
-		
-		if (i == 0) {
-			vec3 targetColors = vec3(1.0, 0.0, 0.0); // Red
-		}
-		else if (i == 1) {
-			vec3 targetColors = vec3(0.0, 1.0, 0.0); // Green
-		}
-		else if (i == 2) {
-			vec3 targetColors = vec3(0.0, 0.0, 1.0); // Blue
-		}
-		else if (i == 3) {
-			vec3 targetColors = vec3(1.0, 1.0, 0.0); // Yellow
-		}
-		else if (i == 4) {
-			vec3 targetColors = vec3(0.0, 1.0, 1.0); // Cyan
-		}
-		else if (i == 5) {
-			vec3 targetColors = vec3(1.0, 0.0, 1.0); // Magenta
-		}
 
-        float distance = distanceBetweenColors(pixelColor, targetColors);
+        float distance = distanceBetweenColors(pixelColor, targetColors[i]);
         float weight = exp(-distance * 3.0); // Exponential weight based on distance
         totalWeight += weight;
 
